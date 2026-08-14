@@ -10,11 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CompareRouteImport } from './routes/compare'
 import { Route as HospitalsIndexRouteImport } from './routes/hospitals.index'
+import { Route as HospitalsSlugRouteImport } from './routes/hospitals.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HospitalsIndexRoute = HospitalsIndexRouteImport.update({
@@ -22,30 +29,43 @@ const HospitalsIndexRoute = HospitalsIndexRouteImport.update({
   path: '/hospitals/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HospitalsSlugRoute = HospitalsSlugRouteImport.update({
+  id: '/hospitals/$slug',
+  path: '/hospitals/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/compare': typeof CompareRoute
+  '/hospitals/$slug': typeof HospitalsSlugRoute
   '/hospitals/': typeof HospitalsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/compare': typeof CompareRoute
+  '/hospitals/$slug': typeof HospitalsSlugRoute
   '/hospitals': typeof HospitalsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/compare': typeof CompareRoute
+  '/hospitals/$slug': typeof HospitalsSlugRoute
   '/hospitals/': typeof HospitalsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/hospitals/'
+  fullPaths: '/' | '/compare' | '/hospitals/$slug' | '/hospitals/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/hospitals'
-  id: '__root__' | '/' | '/hospitals/'
+  to: '/' | '/compare' | '/hospitals/$slug' | '/hospitals'
+  id: '__root__' | '/' | '/compare' | '/hospitals/$slug' | '/hospitals/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CompareRoute: typeof CompareRoute
+  HospitalsSlugRoute: typeof HospitalsSlugRoute
   HospitalsIndexRoute: typeof HospitalsIndexRoute
 }
 
@@ -58,6 +78,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hospitals/': {
       id: '/hospitals/'
       path: '/hospitals'
@@ -65,11 +92,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HospitalsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hospitals/$slug': {
+      id: '/hospitals/$slug'
+      path: '/hospitals/$slug'
+      fullPath: '/hospitals/$slug'
+      preLoaderRoute: typeof HospitalsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CompareRoute: CompareRoute,
+  HospitalsSlugRoute: HospitalsSlugRoute,
   HospitalsIndexRoute: HospitalsIndexRoute,
 }
 export const routeTree = rootRouteImport

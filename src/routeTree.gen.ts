@@ -10,9 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as RegisterHospitalRouteImport } from './routes/register-hospital'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AppointmentNumberRouteImport } from './routes/appointment.$number'
 import { Route as BookSlugRouteImport } from './routes/book.$slug'
 import { Route as HospitalsIndexRouteImport } from './routes/hospitals.index'
 import { Route as HospitalsSlugRouteImport } from './routes/hospitals.$slug'
@@ -20,6 +24,10 @@ import { Route as HospitalsSlugRouteImport } from './routes/hospitals.$slug'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -35,6 +43,21 @@ const CompareRoute = CompareRouteImport.update({
 const RegisterHospitalRoute = RegisterHospitalRouteImport.update({
   id: '/register-hospital',
   path: '/register-hospital',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AppointmentNumberRoute = AppointmentNumberRouteImport.update({
+  id: '/appointment/$number',
+  path: '/appointment/$number',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookSlugRoute = BookSlugRouteImport.update({
@@ -58,6 +81,9 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
   '/register-hospital': typeof RegisterHospitalRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/appointment/$number': typeof AppointmentNumberRoute
   '/book/$slug': typeof BookSlugRoute
   '/hospitals/$slug': typeof HospitalsSlugRoute
   '/hospitals/': typeof HospitalsIndexRoute
@@ -67,6 +93,9 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
   '/register-hospital': typeof RegisterHospitalRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/appointment/$number': typeof AppointmentNumberRoute
   '/book/$slug': typeof BookSlugRoute
   '/hospitals/$slug': typeof HospitalsSlugRoute
   '/hospitals': typeof HospitalsIndexRoute
@@ -74,9 +103,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
   '/register-hospital': typeof RegisterHospitalRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/appointment/$number': typeof AppointmentNumberRoute
   '/book/$slug': typeof BookSlugRoute
   '/hospitals/$slug': typeof HospitalsSlugRoute
   '/hospitals/': typeof HospitalsIndexRoute
@@ -88,6 +121,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/compare'
     | '/register-hospital'
+    | '/admin'
+    | '/dashboard'
+    | '/appointment/$number'
     | '/book/$slug'
     | '/hospitals/$slug'
     | '/hospitals/'
@@ -97,15 +133,22 @@ export interface FileRouteTypes {
     | '/auth'
     | '/compare'
     | '/register-hospital'
+    | '/admin'
+    | '/dashboard'
+    | '/appointment/$number'
     | '/book/$slug'
     | '/hospitals/$slug'
     | '/hospitals'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/auth'
     | '/compare'
     | '/register-hospital'
+    | '/_authenticated/admin'
+    | '/_authenticated/dashboard'
+    | '/appointment/$number'
     | '/book/$slug'
     | '/hospitals/$slug'
     | '/hospitals/'
@@ -113,9 +156,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   CompareRoute: typeof CompareRoute
   RegisterHospitalRoute: typeof RegisterHospitalRoute
+  AppointmentNumberRoute: typeof AppointmentNumberRoute
   BookSlugRoute: typeof BookSlugRoute
   HospitalsSlugRoute: typeof HospitalsSlugRoute
   HospitalsIndexRoute: typeof HospitalsIndexRoute
@@ -128,6 +173,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -149,6 +201,27 @@ declare module '@tanstack/react-router' {
       path: '/register-hospital'
       fullPath: '/register-hospital'
       preLoaderRoute: typeof RegisterHospitalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/appointment/$number': {
+      id: '/appointment/$number'
+      path: '/appointment/$number'
+      fullPath: '/appointment/$number'
+      preLoaderRoute: typeof AppointmentNumberRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/book/$slug': {
@@ -175,11 +248,26 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   CompareRoute: CompareRoute,
   RegisterHospitalRoute: RegisterHospitalRoute,
+  AppointmentNumberRoute: AppointmentNumberRoute,
   BookSlugRoute: BookSlugRoute,
   HospitalsSlugRoute: HospitalsSlugRoute,
   HospitalsIndexRoute: HospitalsIndexRoute,

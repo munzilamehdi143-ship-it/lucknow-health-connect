@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { hospitalsQuery } from "@/lib/queries";
 import { VerificationBadge } from "@/components/site/Badges";
 
-type HospitalSearch = { q?: string };
+type HospitalSearch = { q?: string | undefined };
 
 export const Route = createFileRoute("/hospitals/")({
   validateSearch: (search: Record<string, unknown>): HospitalSearch => ({

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CompareRouteImport } from './routes/compare'
+import { Route as RegisterHospitalRouteImport } from './routes/register-hospital'
 import { Route as BookSlugRouteImport } from './routes/book.$slug'
 import { Route as HospitalsIndexRouteImport } from './routes/hospitals.index'
 import { Route as HospitalsSlugRouteImport } from './routes/hospitals.$slug'
@@ -29,6 +30,11 @@ const AuthRoute = AuthRouteImport.update({
 const CompareRoute = CompareRouteImport.update({
   id: '/compare',
   path: '/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterHospitalRoute = RegisterHospitalRouteImport.update({
+  id: '/register-hospital',
+  path: '/register-hospital',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookSlugRoute = BookSlugRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/register-hospital': typeof RegisterHospitalRoute
   '/book/$slug': typeof BookSlugRoute
   '/hospitals/$slug': typeof HospitalsSlugRoute
   '/hospitals/': typeof HospitalsIndexRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/register-hospital': typeof RegisterHospitalRoute
   '/book/$slug': typeof BookSlugRoute
   '/hospitals/$slug': typeof HospitalsSlugRoute
   '/hospitals': typeof HospitalsIndexRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/register-hospital': typeof RegisterHospitalRoute
   '/book/$slug': typeof BookSlugRoute
   '/hospitals/$slug': typeof HospitalsSlugRoute
   '/hospitals/': typeof HospitalsIndexRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/compare'
+    | '/register-hospital'
     | '/book/$slug'
     | '/hospitals/$slug'
     | '/hospitals/'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/compare'
+    | '/register-hospital'
     | '/book/$slug'
     | '/hospitals/$slug'
     | '/hospitals'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/compare'
+    | '/register-hospital'
     | '/book/$slug'
     | '/hospitals/$slug'
     | '/hospitals/'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   CompareRoute: typeof CompareRoute
+  RegisterHospitalRoute: typeof RegisterHospitalRoute
   BookSlugRoute: typeof BookSlugRoute
   HospitalsSlugRoute: typeof HospitalsSlugRoute
   HospitalsIndexRoute: typeof HospitalsIndexRoute
@@ -129,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/compare'
       fullPath: '/compare'
       preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register-hospital': {
+      id: '/register-hospital'
+      path: '/register-hospital'
+      fullPath: '/register-hospital'
+      preLoaderRoute: typeof RegisterHospitalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/book/$slug': {
@@ -159,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   CompareRoute: CompareRoute,
+  RegisterHospitalRoute: RegisterHospitalRoute,
   BookSlugRoute: BookSlugRoute,
   HospitalsSlugRoute: HospitalsSlugRoute,
   HospitalsIndexRoute: HospitalsIndexRoute,

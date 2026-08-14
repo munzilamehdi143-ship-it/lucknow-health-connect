@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CompareRouteImport } from './routes/compare'
+import { Route as BookSlugRouteImport } from './routes/book.$slug'
 import { Route as HospitalsIndexRouteImport } from './routes/hospitals.index'
 import { Route as HospitalsSlugRouteImport } from './routes/hospitals.$slug'
 
@@ -19,9 +21,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompareRoute = CompareRouteImport.update({
   id: '/compare',
   path: '/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookSlugRoute = BookSlugRouteImport.update({
+  id: '/book/$slug',
+  path: '/book/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HospitalsIndexRoute = HospitalsIndexRouteImport.update({
@@ -37,34 +49,61 @@ const HospitalsSlugRoute = HospitalsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/book/$slug': typeof BookSlugRoute
   '/hospitals/$slug': typeof HospitalsSlugRoute
   '/hospitals/': typeof HospitalsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/book/$slug': typeof BookSlugRoute
   '/hospitals/$slug': typeof HospitalsSlugRoute
   '/hospitals': typeof HospitalsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/book/$slug': typeof BookSlugRoute
   '/hospitals/$slug': typeof HospitalsSlugRoute
   '/hospitals/': typeof HospitalsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/compare' | '/hospitals/$slug' | '/hospitals/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/compare'
+    | '/book/$slug'
+    | '/hospitals/$slug'
+    | '/hospitals/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/compare' | '/hospitals/$slug' | '/hospitals'
-  id: '__root__' | '/' | '/compare' | '/hospitals/$slug' | '/hospitals/'
+  to:
+    | '/'
+    | '/auth'
+    | '/compare'
+    | '/book/$slug'
+    | '/hospitals/$slug'
+    | '/hospitals'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/compare'
+    | '/book/$slug'
+    | '/hospitals/$slug'
+    | '/hospitals/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   CompareRoute: typeof CompareRoute
+  BookSlugRoute: typeof BookSlugRoute
   HospitalsSlugRoute: typeof HospitalsSlugRoute
   HospitalsIndexRoute: typeof HospitalsIndexRoute
 }
@@ -78,11 +117,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compare': {
       id: '/compare'
       path: '/compare'
       fullPath: '/compare'
       preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book/$slug': {
+      id: '/book/$slug'
+      path: '/book/$slug'
+      fullPath: '/book/$slug'
+      preLoaderRoute: typeof BookSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hospitals/': {
@@ -104,7 +157,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   CompareRoute: CompareRoute,
+  BookSlugRoute: BookSlugRoute,
   HospitalsSlugRoute: HospitalsSlugRoute,
   HospitalsIndexRoute: HospitalsIndexRoute,
 }

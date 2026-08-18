@@ -4,6 +4,7 @@ import { CheckCircle2, Navigation, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HospitalMap } from "@/components/site/HospitalMap";
 import { AvailabilityBadge } from "@/components/site/Badges";
+import { AppointmentActions } from "@/components/site/AppointmentActions";
 import { supabase } from "@/integrations/supabase/client";
 import { formatINR, mapsUrl } from "@/lib/geo";
 import type { Appointment, Hospital } from "@/lib/queries";
@@ -143,6 +144,9 @@ function AppointmentPage() {
           <p className="mt-2 text-sm text-muted-foreground">
             Appointment availability will be confirmed by the hospital.
           </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <AppointmentActions appointment={a} />
+          </div>
         </div>
       </div>
 

@@ -102,12 +102,19 @@ function HospitalsPage() {
               params={{ slug: h.slug }}
               className="card-shadow rounded-xl bg-card p-5 transition-transform hover:-translate-y-0.5"
             >
+              <span className="accent-rule mb-4 block h-1 w-14 rounded-full" />
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h2 className="text-base font-semibold leading-snug">{h.name}</h2>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-wide text-primary">
+                  <span
+                    className={`mt-1.5 inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${
+                      h.type === "government"
+                        ? "bg-info/10 text-info"
+                        : "bg-accent text-accent-foreground"
+                    }`}
+                  >
                     {h.type}
-                  </p>
+                  </span>
                 </div>
                 <VerificationBadge status={h.verification_status} />
               </div>

@@ -35,7 +35,7 @@ function ComparePage() {
 
       <div className="card-shadow mt-8 overflow-x-auto rounded-xl bg-card">
         <table className="w-full min-w-[860px] text-sm">
-          <thead className="bg-surface text-left">
+          <thead className="hero-gradient text-left text-primary-foreground">
             <tr className="[&>th]:px-4 [&>th]:py-3 [&>th]:font-semibold">
               <th>Hospital</th>
               <th>Type</th>
@@ -48,7 +48,10 @@ function ComparePage() {
           </thead>
           <tbody>
             {hospitals.map((h) => (
-              <tr key={h.id} className="border-t border-border [&>td]:px-4 [&>td]:py-3">
+              <tr
+                key={h.id}
+                className="border-t border-border transition-colors odd:bg-surface/60 hover:bg-accent/25 [&>td]:px-4 [&>td]:py-3"
+              >
                 <td>
                   <Link
                     to="/hospitals/$slug"
@@ -58,7 +61,17 @@ function ComparePage() {
                     {h.name}
                   </Link>
                 </td>
-                <td className="capitalize">{h.type}</td>
+                <td>
+                  <span
+                    className={`inline-block rounded-full px-2 py-0.5 text-xs font-semibold capitalize ${
+                      h.type === "government"
+                        ? "bg-info/10 text-info"
+                        : "bg-accent text-accent-foreground"
+                    }`}
+                  >
+                    {h.type}
+                  </span>
+                </td>
                 <td className="text-muted-foreground">{h.locality ?? h.city}</td>
                 <td className="text-muted-foreground">
                   {h.specializations[0] ?? "Multiple"}

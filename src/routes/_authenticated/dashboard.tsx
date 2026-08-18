@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, Clock, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { AppointmentActions } from "@/components/site/AppointmentActions";
 import { supabase } from "@/integrations/supabase/client";
 import type { Appointment } from "@/lib/queries";
 
@@ -23,7 +23,6 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 function Dashboard() {
-  const qc = useQueryClient();
   const { data: appointments = [], isLoading } = useQuery({
     queryKey: ["my-appointments"],
     queryFn: async (): Promise<Appointment[]> => {
@@ -35,19 +34,6 @@ function Dashboard() {
       return data ?? [];
     },
   });
-
-  async function cancel(id: string) {
-    const { error } = await supabase
-      .from("appointments")
-      .update({ status: "cancelled" })
-      .eq("id", id);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success("Appointment cancelled. The hospital will be notified.");
-    qc.invalidateQueries({ queryKey: ["my-appointments"] });
-  }
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
@@ -90,11 +76,7 @@ function Dashboard() {
                     View appointment
                   </Link>
                 </Button>
-                {a.status !== "cancelled" ? (
-                  <Button size="sm" variant="outline" onClick={() => cancel(a.id)}>
-                    Cancel
-                  </Button>
-                ) : null}
+                <AppointmentActions appointment={a} />
               </div>
             </div>
           ))}

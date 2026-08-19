@@ -13,12 +13,21 @@ export function haversineKm(
 }
 
 export function directionsUrl(lat: number, lng: number, name?: string) {
-  const dest = name ? `${encodeURIComponent(name)}` : `${lat},${lng}`;
-  return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&destination_place_id=&travelmode=driving#${dest}`;
+  const destination = name
+    ? encodeURIComponent(`${name} ${lat},${lng}`)
+    : `${lat},${lng}`;
+  return `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=driving&dir_action=navigate`;
 }
 
-export function mapsUrl(lat: number, lng: number) {
-  return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+export function mapsUrl(lat: number, lng: number, name?: string) {
+  const query = name ? encodeURIComponent(`${name} ${lat},${lng}`) : `${lat},${lng}`;
+  return `https://www.google.com/maps/search/?api=1&query=${query}`;
+}
+
+/** Opens Google Maps in a new tab, escaping the preview iframe when needed. */
+export function openExternal(url: string) {
+  const win = window.open(url, "_blank", "noopener,noreferrer");
+  if (!win) window.top?.location.assign(url);
 }
 
 export function formatINR(value: number | null | undefined) {

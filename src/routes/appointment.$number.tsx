@@ -6,7 +6,7 @@ import { HospitalMap } from "@/components/site/HospitalMap";
 import { AvailabilityBadge } from "@/components/site/Badges";
 import { AppointmentActions } from "@/components/site/AppointmentActions";
 import { supabase } from "@/integrations/supabase/client";
-import { formatINR, mapsUrl } from "@/lib/geo";
+import { directionsUrl, formatINR, mapsUrl, openExternal } from "@/lib/geo";
 import type { Appointment, Hospital } from "@/lib/queries";
 
 export const Route = createFileRoute("/appointment/$number")({
@@ -160,15 +160,27 @@ function AppointmentPage() {
           <div className="mt-4 flex flex-wrap gap-3">
             <Button asChild>
               <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=${h.latitude},${h.longitude}&travelmode=driving`}
+                href={directionsUrl(h.latitude, h.longitude, h.name)}
                 target="_blank"
                 rel="noreferrer noopener"
+                onClick={(e) => {
+                  e.preventDefault();
+                  openExternal(e.currentTarget.href);
+                }}
               >
                 <Navigation className="size-4" /> Get directions
               </a>
             </Button>
             <Button asChild variant="outline">
-              <a href={mapsUrl(h.latitude, h.longitude)} target="_blank" rel="noreferrer noopener">
+              <a
+                href={mapsUrl(h.latitude, h.longitude, h.name)}
+                target="_blank"
+                rel="noreferrer noopener"
+                onClick={(e) => {
+                  e.preventDefault();
+                  openExternal(e.currentTarget.href);
+                }}
+              >
                 <ExternalLink className="size-4" /> Open in Google Maps
               </a>
             </Button>

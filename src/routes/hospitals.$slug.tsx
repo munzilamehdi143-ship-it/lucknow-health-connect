@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { HospitalMap } from "@/components/site/HospitalMap";
 import { VerificationBadge, AvailabilityBadge } from "@/components/site/Badges";
 import { doctorsQuery, hospitalQuery } from "@/lib/queries";
-import { formatINR, haversineKm, mapsUrl } from "@/lib/geo";
+import { directionsUrl, formatINR, haversineKm, mapsUrl, openExternal } from "@/lib/geo";
 import { computeTravel } from "@/lib/routes.functions";
 
 export const Route = createFileRoute("/hospitals/$slug")({
@@ -156,9 +156,17 @@ function HospitalProfile() {
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <Button asChild disabled={!hasCoords}>
               <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=${hospital.latitude},${hospital.longitude}&travelmode=driving`}
+                href={
+                  hasCoords
+                    ? directionsUrl(hospital.latitude!, hospital.longitude!, hospital.name)
+                    : (hospital.google_maps_url ?? "#")
+                }
                 target="_blank"
                 rel="noreferrer noopener"
+                onClick={(e) => {
+                  e.preventDefault();
+                  openExternal(e.currentTarget.href);
+                }}
               >
                 <Navigation className="size-4" /> Get directions
               </a>
@@ -167,11 +175,15 @@ function HospitalProfile() {
               <a
                 href={
                   hasCoords
-                    ? mapsUrl(hospital.latitude!, hospital.longitude!)
+                    ? mapsUrl(hospital.latitude!, hospital.longitude!, hospital.name)
                     : (hospital.google_maps_url ?? "#")
                 }
                 target="_blank"
                 rel="noreferrer noopener"
+                onClick={(e) => {
+                  e.preventDefault();
+                  openExternal(e.currentTarget.href);
+                }}
               >
                 <ExternalLink className="size-4" /> Open in Google Maps
               </a>

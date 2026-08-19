@@ -12,6 +12,7 @@ import { doctorsQuery, hospitalQuery } from "@/lib/queries";
 import { formatINR } from "@/lib/geo";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { sendAppointmentToWebhook } from "@/lib/n8n.functions";
 
 type BookSearch = { doctor?: string | undefined };
 
@@ -118,6 +119,30 @@ function BookPage() {
       toast.error(error?.message ?? "Could not create the appointment request");
       return;
     }
+
+    void sendAppointmentToWebhook({
+      data: {
+        appointment_number: data.appointment_number,
+        patient_name: v.patient_name,
+        patient_phone: v.patient_phone,
+        patient_email: v.patient_email || null,
+        patient_age: v.patient_age ? Number(v.patient_age) : null,
+        patient_gender: v.patient_gender || null,
+        reason: v.reason || null,
+        hospital_name: hospital.name,
+        hospital_slug: slug,
+        doctor_name: doctor?.full_name ?? null,
+        doctor_specialization: doctor?.specialization ?? null,
+        appointment_date: v.appointment_date,
+        appointment_time: v.appointment_time,
+        consultation_fee: consultationFee,
+        platform_fee: PLATFORM_FEE,
+        tax_amount: tax,
+        total_amount: total,
+        availability_mode: doctor?.availability_mode ?? "confirmation_required",
+      },
+    }).catch(() => undefined);
+
     navigate({ to: "/appointment/$number", params: { number: data.appointment_number } });
   }
 
